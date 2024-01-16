@@ -1,0 +1,25 @@
+html {
+  font-family: 'Open Sans', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+  @apply bg-gray-700 text-white;
+}
+
+nav {
+  border-bottom: 5px solid #000000;
+}
+.formysanity{
+  list-style-type: none;
+}
+.card{
+  background-color: #515cd2;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+}
+.title{
+  font-size: 20px;
+  font-weight: bold;
+}
