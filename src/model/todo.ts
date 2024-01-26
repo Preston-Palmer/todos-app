@@ -2,7 +2,7 @@ export interface Todo {
     id: string
     title: string
     description: string
-    duedate: string
+    due: string
     severity: string
     completed: boolean
 }

@@ -52,7 +52,7 @@ nav {
   font-weight: bold;
   border-bottom: 3px solid #160077;
 }
-.assigned{
+.completed{
   text-indent: 5px;
   display:flex;
   color: #dfdfdf;
@@ -60,12 +60,11 @@ nav {
   font-size: 20px;
   font-weight: bold;
 }
-.assigned-member{
+.completed-text{
   display: flex;
   text-align: left;
   margin-left: 10px;
-  background: #5d7ca9;
-  border-radius: 10px;
   color: #dfdfdf;
   font-size: 20px;
+  margin-bottom: 10px;
 }
