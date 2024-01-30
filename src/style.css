@@ -12,6 +12,10 @@ nav {
 .formysanity{
   list-style-type: none;
 }
+.addbutton{
+  width: 100%;
+  display: block;
+}
 .card{
   border-radius: 1px;
   background-color: #4b4b4b;
@@ -22,18 +26,19 @@ nav {
 .title{
   display: flex;
   color: #dfdfdf;
-  justify-content: center;
+  justify-content: space-between;
   font-size: 25px;
   font-weight: bold;
   border-bottom: 5px solid #000000;
 }
-.description{
+.view description{
   text-indent: 5px;
   display: flex;
   color: #dfdfdf;
   margin-top: 10px;
   font-size: 20px;
   font-weight: bold;
+  margin-left: 5px;
 }
 .description-text{
   display: flex;
@@ -54,16 +59,16 @@ nav {
 }
 .completed{
   text-indent: 5px;
-  display:flex;
+  display: flow-root;
   color: #dfdfdf;
   margin-top: 10px;
   font-size: 20px;
   font-weight: bold;
 }
 .completed-text{
-  display: flex;
+  float: left;
   text-align: left;
-  margin-left: 10px;
+  margin-left: 5px;
   color: #dfdfdf;
   font-size: 20px;
   margin-bottom: 10px;
