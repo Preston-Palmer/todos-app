@@ -11,78 +11,71 @@
             :key="index"
             class="card"
         >
-            <form
-                action="updateTodos(todo.id)"
-                method="post"
-                @submit.prevent="updateTodos(todo.id)"
-            >
-                <!-- I want the items to have a draggable icon to the left, and have them drag around, I also don't want the same size, but I do want a max size for the description
+            <!-- I want the items to have a draggable icon to the left, and have them drag around, I also don't want the same size, but I do want a max size for the description
             and an auto font for the title or just overflow for the title as well. I want the description area to also be a clickable which will display it in a popup. I also
         want severity colors to the right of the title. Then to the right of that I want an edit button, which will allow the title and description and people to be editable.-->
-                <div class="title flex">
-                    <div v-if="editing" class="ml-3">{{ todo.title }}</div>
-                    <div v-else>
-                        Title:<input
-                            v-model="todo.title"
-                            type="text"
-                            class="ml-3 text-black"
-                        />
-                    </div>
-                    <div class="justify-self-end mr-1">
-                        <button @click="toggleEditing">
-                            <i class="i-mdi:edit h-8 w-8"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Title area draggable unless editted  -->
-                <div class="description">Description:</div>
-                <!-- I want to have the text centered in the frame -->
-                <div v-if="editing" class="description-text">
-                    {{ todo.description }}
-                </div>
-                <textarea
-                    v-else
-                    v-model="todo.description"
-                    class="flex w-100% text-black"
-                    type="text"
-                ></textarea>
-                <div v-if="editing" class="duedate">
-                    Due Date: {{ todo.due }}
-                </div>
+            <div class="title flex">
+                <div v-if="editing" class="ml-3">{{ todo.title }}</div>
                 <div v-else>
-                    DueDate:
-                    <input v-model="todo.due" class="text-black" type="text" />
-                </div>
-
-                <div v-if="editing" class="completed">
-                    <p
-                        v-if="todo.completed === true"
-                        class="completed-text overflow-auto"
-                    >
-                        Status: Completed
-                    </p>
-                    <div v-else class="completed-text overflow-auto">
-                        Status: Not Completed
-                    </div>
-                    <div class="float-right mr-2">
-                        <button @click="deleteTodos(todo.id)">
-                            <i class="i-mdi:delete h-8 w-8"></i>
-                        </button>
-                    </div>
-
-                    <!-- I want to have people show, and then a show more button that highlights if you hold over the bottom area where assigned to is, if you click
-        their is a popup that will show up and display the list vertically. else it will show pics with their first initial. -->
-                </div>
-                <div v-else>
-                    Status:
-                    <input
-                        v-model="todo.completed"
-                        class="text-black"
-                        type="checkbox"
+                    Title:<input
+                        v-model="todo.title"
+                        type="text"
+                        class="ml-3 text-black"
+                        @keyup.enter="updateTodos(todo.id)"
                     />
                 </div>
-            </form>
+                <div class="justify-self-end mr-1">
+                    <button @click="toggleEditing">
+                        <i class="i-mdi:edit h-8 w-8"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Title area draggable unless editted  -->
+            <div class="description">Description:</div>
+            <!-- I want to have the text centered in the frame -->
+            <div v-if="editing" class="description-text">
+                {{ todo.description }}
+            </div>
+            <textarea
+                v-else
+                v-model="todo.description"
+                class="flex w-100% text-black"
+                type="text"
+            ></textarea>
+            <div v-if="editing" class="duedate">Due Date: {{ todo.due }}</div>
+            <div v-else>
+                DueDate:
+                <input v-model="todo.due" class="text-black" type="text" />
+            </div>
+
+            <div v-if="editing" class="completed">
+                <p
+                    v-if="todo.completed === true"
+                    class="completed-text overflow-auto"
+                >
+                    Status: Completed
+                </p>
+                <div v-else class="completed-text overflow-auto">
+                    Status: Not Completed
+                </div>
+                <div class="float-right mr-2">
+                    <button @click="deleteTodos(todo.id)">
+                        <i class="i-mdi:delete h-8 w-8"></i>
+                    </button>
+                </div>
+
+                <!-- I want to have people show, and then a show more button that highlights if you hold over the bottom area where assigned to is, if you click
+        their is a popup that will show up and display the list vertically. else it will show pics with their first initial. -->
+            </div>
+            <div v-else>
+                Status:
+                <input
+                    v-model="todo.completed"
+                    class="text-black"
+                    type="checkbox"
+                />
+            </div>
         </li>
         <li class="card flex justify-center">
             <button class="addbutton text-3xl" @click="makeTodos">
@@ -95,31 +88,28 @@
         <input type="checkbox" />
         <span class="slider"></span>
     </label> -->
-    <div><RouterView /></div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import axios from 'axios'
-const title = ref('')
-const description = ref('')
-const due = ref('')
-const severity = ref('')
-const completed = ref(false)
-const id = ref('')
+import { Todo } from './model/todo'
+
+const todos = [] as Todo[]
 
 let editing = ref(true)
 
 const toggleEditing = () => {
     editing.value = !editing.value
-    console.log(editing.value)
 }
 
 axios
     .get('/localhost/api/todos')
     .then((response) => {
         state.htmlContent = response.data
+        todos.push(response.data)
         console.log(state.htmlContent)
+        console.log('Todos: ', todos)
     })
     .catch((error) => {
         console.log(error)
@@ -156,15 +146,35 @@ const deleteTodos = (todoID: string) => {
         window.location.reload()
     })
 }
-// const updateTodos = (todoID: string) => {
-//     axios
-//         .put('/localhost/api/todos/' + todoID, {
-//             title: todos[0].title
-//         })
-//         .then(() => {
-//             window.location.reload()
-//         })
-// }
+const findTodos = (todoID: string) => {
+    console.log('TodoID on Array: ' + todos)
+    console.log('TodoID: ' + todoID)
+    for (let i = 0; i < todos.length; i++) {
+        if (todos[i].id == todoID) {
+            return todos[i]
+        } else {
+            console.log('No todo found')
+        }
+    }
+}
+const updateTodos = (todoID: string) => {
+    console.log('Test: ' + todoID)
+    console.log('Todos: ' + todos[0].id)
+    let tempTodo = todos.find((t) => t.id === todoID)
+    console.log('tempTodo ' + tempTodo)
+    // axios
+    //     .put('/localhost/api/todos/' + todoID, {
+    //         title: tempTodo?.title,
+    //         description: tempTodo?.description,
+    //         due: tempTodo?.due,
+    //         severity: tempTodo?.severity,
+    //         completed: tempTodo?.completed
+    //     })
+    //     .then(() => {
+    //         // window.location.reload()
+    //     })
+    console.log('test')
+}
 </script>
 
 <!-- find the todo that matches the todoID
