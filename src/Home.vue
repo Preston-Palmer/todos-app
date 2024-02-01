@@ -95,7 +95,7 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { Todo } from './model/todo'
 
-const todos = [] as Todo[]
+let todos = [] as Todo[]
 
 let editing = ref(true)
 
@@ -107,7 +107,7 @@ axios
     .get('/localhost/api/todos')
     .then((response) => {
         state.htmlContent = response.data
-        todos.push(response.data)
+        todos = response.data
         console.log(state.htmlContent)
         console.log('Todos: ', todos)
     })
@@ -139,43 +139,21 @@ const makeTodos = () => {
         .then(() => {
             window.location.reload()
         })
-    console.log('test')
 }
 const deleteTodos = (todoID: string) => {
     axios.delete('/localhost/api/todos/' + todoID).then(() => {
         window.location.reload()
     })
 }
-const findTodos = (todoID: string) => {
-    console.log('TodoID on Array: ' + todos)
-    console.log('TodoID: ' + todoID)
-    for (let i = 0; i < todos.length; i++) {
-        if (todos[i].id == todoID) {
-            return todos[i]
-        } else {
-            console.log('No todo found')
-        }
-    }
-}
 const updateTodos = (todoID: string) => {
-    console.log('Test: ' + todoID)
-    console.log('Todos: ' + todos[0].id)
     let tempTodo = todos.find((t) => t.id === todoID)
-    console.log('tempTodo ' + tempTodo)
-    // axios
-    //     .put('/localhost/api/todos/' + todoID, {
-    //         title: tempTodo?.title,
-    //         description: tempTodo?.description,
-    //         due: tempTodo?.due,
-    //         severity: tempTodo?.severity,
-    //         completed: tempTodo?.completed
-    //     })
-    //     .then(() => {
-    //         // window.location.reload()
-    //     })
+    axios.put('/localhost/api/todos/' + todoID, {
+        title: tempTodo?.title,
+        description: tempTodo?.description,
+        due: tempTodo?.due,
+        severity: tempTodo?.severity,
+        completed: tempTodo?.completed
+    })
     console.log('test')
 }
 </script>
-
-<!-- find the todo that matches the todoID
-        no v-model, specific id for these fields, when I get the edit, I would look for the id 1-title -->
